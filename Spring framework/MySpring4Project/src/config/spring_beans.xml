@@ -2,14 +2,63 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans-4.3.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	<!-- UserMapper설정 -->
+	<!-- MapperScannerConfigurer 설정 -->
+	<!-- myspring.user.dao.mapper 패키지 아래에 @MyMapper라는 어노테이션을 선언한 Mapper인터페이스를 모두 찾으세요 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="myspring.user.dao.mapper" />
+		<property name="annotationClass"
+			value="myspring.user.dao.mapper.MyMapper" />
+	</bean>
+
+	<!-- Mapper 설정 -->
+	<!-- 아래와 같이 설정하면 Mapper 인터페이스가 추가 될때 마다 계속 Mapper인터페이스 이름을 설정해 주어야한다 -->
+<!-- 	<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean"> -->
+<!-- 	<property name="mapperInterface" value="myspring.user.dao.mapper.UserMapper"/> -->
+<!-- 	<property name="sqlSessionTemplate" ref="sqlSession" /> -->
+<!-- 	</bean> -->
 	
+	<!-- SqlSessionTemplate클래스를 bean으로 등록 -->
+	<bean id="sqlSession"
+		class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+	<!-- SqlSessionFactoryBean 클래스를 BEan으로 등록 -->
+	<bean id="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref=" dataSource " />
+		<property name="configLocation"
+			value="classpath:config/SqlMapConfig.xml" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:config/*Mapper.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- DataSource 구체적인 BAsicDataSource클래스를 Bean으로 등록 -->
+	<bean id=" dataSource "
+		class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="${db.driverClass}" />
+		<property name="url" value="${db.url}" />
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+	</bean>
+	<!-- <bean id="dataSource" -->
+	<!-- class="org.apache.commons.dbcp2.BasicDataSource" -->
+	<!-- p:driverClassName="${db.driverClass}" p:url="${db.url}" -->
+	<!-- p:username="${db.username}" p:password="${db.password}" /> -->
+
 	<!-- properties file 설정 -->
-	<context:property-placeholder location="classpath:config/values.properties"/>
+	<context:property-placeholder
+		location="classpath:config/values.properties" />
 	<!-- Component Auto Scanning -->
-	<context:component-scan base-package="myspring.di.annot"/>
-	
+	<context:component-scan
+		base-package="myspring.user" />
+
 	<!-- StringPrinter 클래스를 Bean으로 설정 -->
 	<bean id="sPrinter" class="myspring.di.xml.StringPrinter" />
 	<!-- ConsolePrinter 클래스를 Bean으로 설정 -->
