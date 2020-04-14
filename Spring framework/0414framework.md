@@ -55,11 +55,23 @@ db.password=tiger
 - Log4J :logging을 위한 open source 라이브러리
   - Trace, Debug, Info, Warn, Error
 
+for( int i=0;i++) {
+    //System.out.println("i값은 " + i);
+}
 
+Logger logger = LogManager.getLogger(); 
+for( int i=0;i++) {
+    logger.debug("i값은 " + i); //1)
+    logger.error(" error msg " + e.getMessage()); //2)
+}
+현재 log level이 debug 이면 ? 1), 2)
+현재 log level이 error 이면 ? 2)
 
+src/log4j2.xml 설정 xml 이 필요함
+: log level 설정, 
+: appender(log 어디에 출력할지) 설정
 
-
-
+콘솔, 파일
 
 ----
 
