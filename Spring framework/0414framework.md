@@ -196,9 +196,89 @@ public interface USer2Mapper {
 	<property name="basePackage" value="myspring.user.dao.mapper" />
 	<property name="annotationClass"			value="myspring.user.dao.mapper.MyMapper" />
 </bean>
+
 ```
 
-----
+---
+
+- 리뷰 : 
+MyBatis 에서 테이블간의 의존관계가 있는 경우, 컬럼명과 VO의 getter/setter 이름이
+일치하지 않는 경우
+- J2EE (Enterprise Edition) 기술
+ J2SE, J2EE 
+ : Servlet, JSP(Java Server page), JSTL(Java Standard Tag Library)
+Spring MVC  구조와 핵심컴포넌트
+----------------------------------------------------------------------
+CREATE TABLE STUDENT 
+(
+	STU_ID         NUMBER (6) NOT NULL PRIMARY KEY,
+	STU_NAME       VARCHAR2 (20) NOT NULL,
+	STU_AGE        NUMBER (3) NOT NULL,
+	STU_GRADE      VARCHAR2 (20),
+	STU_DAYNIGHT   VARCHAR2 (20),
+	DEPT_ID        NUMBER (4) NOT NULL,
+	FOREIGN KEY (DEPT_ID) REFERENCES DEPT (DEPT_ID)
+);
+CREATE TABLE DEPT 
+(
+	DEPT_ID     NUMBER (4) NOT NULL PRIMARY KEY,
+	DEPT_NAME   VARCHAR2 (30) CONSTRAINT DEPT_NAME_NN NOT NULL
+);
+
+public class StudentVO {
+	private Integer id;
+	private String name;
+	private Integer age;
+	private String grade;
+	private String daynight;
+	//private Integer deptid; (X)
+	private DeptVO dept; //1:1관계 (O)
+}
+public class DeptVO {
+	private Integer deptid;
+	private String deptname;
+}
+-- StudentMapper.xml
+resultType=>"User" : 컬럼명과 VO의 getter/setter의 이름이 같으면
+resultMap=>컬럼명과 VO의 getter/setter의 이름이 같지 않은 경우에 사용하고
+                개발자과 수동으로 매핑을 해주어야 한다
+	<select id="selectStudentDeptById" resultMap="studentDeptResultMap">
+		select s.stu_id,
+		s.stu_name,
+		s.stu_age,
+		s.stu_grade,
+		s.stu_daynight,
+		d.dept_id,
+		d.dept_name
+		from student s, dept d
+		where s.dept_id = d.dept_id
+	</select>
+​             //Student - myspring.user.vo.StudentVO
+​	<resultMap id="studentDeptResultMap" type="Student">
+​                          <!--setId()
+​		<id property="id" column="stu_id" javaType="Integer" jdbcType="NUMERIC" />
+​		<result property="name" column="stu_name" javaType="String"
+​			jdbcType="VARCHAR" />
+​		<result property="age" column="stu_age" javaType="Integer"
+​			jdbcType="NUMERIC" />
+​		<result property="grade" column="stu_grade" javaType="String"
+​			jdbcType="VARCHAR" />
+​		<result property="daynight" column="stu_daynight" javaType="String"
+​			jdbcType="VARCHAR" />
+​		<!-- setDept(DeptVO dept) 
+​                               Dept : myspring.user.vo.DeptVO 
+​                            -->	
+​		<association property="dept" column="dept_id" javaType="Dept"
+​			resultMap="deptResultMap" />
+​	</resultMap>
+​	<resultMap id="deptResultMap" type="Dept">
+​                          <!--setDeptid() -->
+​		<id property="deptid" column="dept_id" javaType="Integer" jdbcType="NUMERIC" />
+​		<result property="deptname" column="dept_name" javaType="String"
+​			jdbcType="VARCHAR" />
+​	</resultMap>
+
+
 
 >테이블의 컬럼명과 VO객체의(변수,getter,setter)이름을 동일하게 설정하지 못하는 상황이 생길 수 있다.
 >
