@@ -36,6 +36,7 @@ public class EmployeesRead {
 			System.out.println(stmt.getClass().getName());
 			//4. SQL 실행
 			rs = stmt.executeQuery(sql);
+			System.out.println(rs.getClass().getName());
 			//5. query 결과 처리
 			while(rs.next()) {
 				String id = rs.getString("employee_id");

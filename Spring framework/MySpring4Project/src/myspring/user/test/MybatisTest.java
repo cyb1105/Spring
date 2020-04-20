@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import myspring.user.dao.mapper.StudentMapper;
 import myspring.user.service.UserService;
+import myspring.user.vo.DeptVO;
 import myspring.user.vo.StudentVO;
 import myspring.user.vo.UserVO;
 
@@ -44,6 +45,11 @@ public class MybatisTest {
 	
 	@Test
 	public void stuMapper() {
+		//Test케이스 : StudentMapper -> SqlSession -> StudentMapper.xml
+		StudentVO student = new StudentVO(1500, "둘리", 20, "1학년", "주간", new DeptVO(20)); 
+		int cnt = studentMapper.insertStudent(student);
+		System.out.println("등록된 학생 건수" + cnt);
+		
 		List<StudentVO> selectStudentDeptById = studentMapper.selectStudentDeptById();
 		for (StudentVO studentVO : selectStudentDeptById) {
 			System.out.println(studentVO);
