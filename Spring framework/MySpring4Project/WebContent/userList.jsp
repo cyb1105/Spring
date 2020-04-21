@@ -13,7 +13,7 @@
 	function deleteUser(userId){
 		var result = confirm(userId +" 사용자를 정말로 삭제하시겠습니까?");
 		if(result) {
-			location.href = "deleteUser.do/"+userId;
+			location.href = "userDelete.do/"+userId;
 		}
 	}
 </script>
@@ -50,7 +50,7 @@
 			</c:forEach>
 			<tr>
 				<td colspan="7">
-					<a href="insertUserForm.do">사용자 등록</a>
+					<a href="userInsertForm.do">사용자 등록</a>
 				</td>
 			</tr>
 		</tbody> 
