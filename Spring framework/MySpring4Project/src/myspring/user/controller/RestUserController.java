@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import myspring.user.service.UserService;
 import myspring.user.vo.UserVO;
+import myspring.user.vo.UserVOXML;
 
 @RestController
 //@Controller + @ResponseBody
@@ -65,7 +66,12 @@ public class RestUserController {
 		}
 	}
 	
-	
+	//사용자목록 xml형식
+	@GetMapping("/usersxml")
+	public UserVOXML userListXml() {
+		List<UserVO> userList = userService.getUserList();
+		return new UserVOXML("success",userList);
+	}
 	
 	
 	
