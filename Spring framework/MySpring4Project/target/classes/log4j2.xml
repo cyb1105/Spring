@@ -22,7 +22,7 @@
 <!-- 		</Logger> -->
 
 		<Root level="TRACE">
-			<AppenderRef ref="console" level="INFO" />
+			<AppenderRef ref="console" level="DEBUG" />
 			<AppenderRef ref="File" level="DEBUG" />
 		</Root>
 	</Loggers>

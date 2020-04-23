@@ -43,7 +43,8 @@ public class MybatisTest {
 	@Autowired
 	StudentMapper studentMapper;
 	
-	@Test
+	
+	@Test @Ignore
 	public void stuMapper() {
 		//Test케이스 : StudentMapper -> SqlSession -> StudentMapper.xml
 		StudentVO student = new StudentVO(1500, "둘리", 20, "1학년", "주간", new DeptVO(20)); 
@@ -56,10 +57,10 @@ public class MybatisTest {
 		}
 	}
 	
-	@Test @Ignore
+	@Test //@Ignore
 	public void service() {
 		//userService -> UserDAO -> SqlSession -> SqlSessionFactory -> DataSource
-		UserVO user = userService.getUser("gildong");
+		UserVO user = userService.getUser("spring");
 		System.out.println(user);
 	}
 

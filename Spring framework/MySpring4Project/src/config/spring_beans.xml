@@ -3,8 +3,21 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans-4.3.xsd
-		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context-4.3.xsd">
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+	<!-- AOP설정 -->
+	<!-- @Aspect -->
+	<aop:aspectj-autoproxy/>
+
+	<bean id ="ptAdvice" class="myspring.aop.xml.PerformanceTraceAdvice"/>
+	<aop:config>
+	<!-- advice+pointcut= aspect -->
+		<aop:aspect ref="ptAdvice">
+			<aop:around method="trace" pointcut="execution(public * myspring.user..*(..))"/>			
+		</aop:aspect>
+	</aop:config>
 	<!-- UserMapper설정 -->
 	<!-- MapperScannerConfigurer 설정 -->
 	<!-- myspring.user.dao.mapper 패키지 아래에 @MyMapper라는 어노테이션을 선언한 Mapper인터페이스를 모두 찾으세요 -->
@@ -55,9 +68,10 @@
 	<!-- properties file 설정 -->
 	<context:property-placeholder
 		location="classpath:config/values.properties" />
+	
 	<!-- Component Auto Scanning -->
 	<context:component-scan
-		base-package="myspring.user">
+		base-package="myspring.user,myspring.aop">
 		<!-- @Controller어노테이션을 선언한 컴포넌트는 제외하겠다. -->
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
